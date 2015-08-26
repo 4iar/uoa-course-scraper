@@ -1,16 +1,9 @@
 from scrapy.item import Item, Field
 
 
-
-class StudyType(Item):
-    """Method of study (UG, PG, DL)"""
-    study_type = "UG"
-
-class Category(StudyType):
+class Course(Item):
     category = Field()
-    category_url = Field()
-
-class Course(Category):
+    study_type = Field()
     course_url = Field()
     level = Field()
     half = Field()
