@@ -9,7 +9,7 @@ class StudyType(Item):
 class Category(StudyType):
     category = Field()
 
-class Module(Category):
+class Course(Category):
     level = Field()
     half = Field()
     credits = Field()
