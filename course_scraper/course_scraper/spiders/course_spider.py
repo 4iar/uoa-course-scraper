@@ -27,7 +27,7 @@ class CourseSpider(Spider):
 
         item = Course()
         item['study_type'] = "UG"
-        item['category'] = response.xpath('/html/body/div[3]/div/ol/li[5]/a/text()').extract()
+        item['category'] = response.xpath('/html/body/div[3]/div/ol/li[5]/a/text()').extract()[0]
         item['title'] = response.xpath('//html/body/div[3]/div/ol/li[6]/text()').extract()[0].encode('ascii')
         item['course_url'] = response.url
         item['level'] = int(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[1]/td[2]/text()').extract()[0])
