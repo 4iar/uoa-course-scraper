@@ -66,7 +66,6 @@ class CourseSpider(Spider):
     def parse_timetable_json(self, response):
         item = response.meta['item']
         item['timetable_json'] = json.loads(response.body_as_unicode())
-        print(item)
 
         yield item
 
