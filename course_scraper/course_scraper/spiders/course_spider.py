@@ -33,8 +33,7 @@ class CourseSpider(Spider):
         item['code'] = response.xpath('//*[@id="course-1"]/@value').extract()[0].encode('ascii')
         item['credits'] = float(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[2]/text()').extract()[0].split()[0])
 
-        h = response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[1]/text()')
-        if 'First' in h or 'first' in h:
+        h = response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[1]/text()'.extract())[0]
             item['half'] = 1
         else:
             item['half'] = 2
