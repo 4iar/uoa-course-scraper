@@ -14,7 +14,6 @@ class CourseSpider(Spider):
         category_urls = Selector(response).xpath('//html/body/div[5]/div[*]/div[*]/div/div[2]/div[2]/a/@href').extract()
 
         for category_url in category_urls:
-            print(category_url)
             yield Request(url=category_url,callback=self.parse_categories)
 
     def parse_categories(self, response):
