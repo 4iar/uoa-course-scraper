@@ -14,13 +14,13 @@ class CourseSpider(Spider):
         category_urls = Selector(response).xpath('//html/body/div[5]/div[*]/div[*]/div/div[2]/div[2]/a/@href').extract()
 
         for category_url in category_urls:
-            yield Request(url=category_url,callback=self.parse_categories)
+            yield Request(url=category_url, callback=self.parse_categories)
 
     def parse_categories(self, response):
         course_urls = response.xpath('//html/body/div[5]/div[*]/div[*]/div/div[3]/div[2]/a/@href').extract()
 
         for course_url in course_urls:
-            yield Request(url=course_url,callback=self.parse_courses)
+            yield Request(url=course_url, callback=self.parse_courses)
             
     def parse_courses(self, response):
 
@@ -29,9 +29,11 @@ class CourseSpider(Spider):
         item['category'] = response.xpath('/html/body/div[3]/div/ol/li[5]/a/text()').extract()[0]
         item['title'] = response.xpath('//html/body/div[3]/div/ol/li[6]/text()').extract()[0].encode('ascii')
         item['course_url'] = response.url
-        item['level'] = int(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[1]/td[2]/text()').extract()[0])
+        item['level'] = int(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[1]/td[2]/text()').
+                            extract()[0])
         item['code'] = response.xpath('//*[@id="course-1"]/@value').extract()[0].encode('ascii')
-        item['credits'] = float(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[2]/text()').extract()[0].split()[0])
+        item['credits'] = float(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[2]/text()').
+                                extract()[0].split()[0])
 
         h = response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[1]/text()'.extract())[0]
         if 'first' in h.lower():
@@ -48,8 +50,7 @@ class CourseSpider(Spider):
                      'course-6': '',
                      'course-7': '',
                      'course-8': '',
-                     'submit': 'submit'
-                     }
+                     'submit': 'submit'}
 
         url = 'https://www.abdn.ac.uk/mist/apps/courseoverlay/timetable/overlays/'
         return [FormRequest(url, formdata=courses, callback=self.parse_course_timetable, meta={'item': item})]
@@ -67,22 +68,3 @@ class CourseSpider(Spider):
         item['timetable_json'] = json.loads(response.body_as_unicode())
 
         yield item
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
