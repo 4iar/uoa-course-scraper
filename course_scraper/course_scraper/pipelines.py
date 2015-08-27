@@ -33,5 +33,4 @@ class PicklePipeline(object):
         for k, v in self.courses.iteritems():
             shelf[k] = v
 
-        print("=============+_+_+_+_+_==============")
         shelf.close()
