@@ -1,7 +1,6 @@
 import shelve
 
 
-
 class CourseScraperPipeline(object):
     def process_item(self, item, spider):
         return item
@@ -10,8 +9,7 @@ class CourseScraperPipeline(object):
 class PicklePipeline(object):
 
     def __init__(self):
-        self.courses = { }
-
+        self.courses = {}
 
     def process_item(self, item, spider):
         key = item['code'].encode('ascii')
@@ -28,19 +26,12 @@ class PicklePipeline(object):
             'timetable_json_url': item['timetable_json_url'],
             'timetable_json': item['timetable_json'],
         }
-
         self.courses[key] = item_dict
-
 
     def close_spider(self, spider):
         shelf = shelve.open('courses.db')
-
-        for k,v in self.courses.iteritems():
+        for k, v in self.courses.iteritems():
             shelf[k] = v
 
         print("=============+_+_+_+_+_==============")
         shelf.close()
-
-
-
-
