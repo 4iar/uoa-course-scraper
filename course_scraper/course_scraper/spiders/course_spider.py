@@ -35,7 +35,7 @@ class CourseSpider(Spider):
         item['credits'] = float(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[2]/text()').
                                 extract()[0].split()[0])
 
-        h = response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[1]/text()'.extract())[0]
+        h = response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[1]/text()').extract()[0]
         if 'first' in h.lower():
             item['half'] = 1
         else:
