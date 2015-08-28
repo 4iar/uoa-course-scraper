@@ -1,7 +1,6 @@
 import json
 
 
-
 class CourseScraperPipeline(object):
     def process_item(self, item, spider):
         return item
@@ -28,6 +27,13 @@ class JSONPipeline(object):
             'timetable_json_url': item['timetable_json_url'],
             'timetable_json': item['timetable_json'],
         }
+
+        try:
+            item_dict['timetable_json_lectures_only'] = [l for l in item['timetable_json']['events']
+                                                         if l['typeShort'] == 'LEC']
+        except (KeyError, ValueError):  # handles courses with no timetable (e.g. distance learning)
+            item_dict['timetable_json_lectures_only'] = None
+
         self.courses[key] = item_dict
 
     def close_spider(self, spider):
