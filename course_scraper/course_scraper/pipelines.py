@@ -1,5 +1,4 @@
-import shelve
-
+import json
 
 
 
@@ -8,11 +7,11 @@ class CourseScraperPipeline(object):
         return item
 
 
-class PicklePipeline(object):
-    shelf_filename = 'courses'
+class JSONPipeline(object):
 
     def __init__(self):
         self.courses = {}
+        self.filename = 'courses.json'
 
     def process_item(self, item, spider):
         key = item['code'].encode('ascii')
@@ -32,8 +31,6 @@ class PicklePipeline(object):
         self.courses[key] = item_dict
 
     def close_spider(self, spider):
-        shelf = shelve.open(shelf_filename)
-        for k, v in self.courses.iteritems():
-            shelf[k] = v
-
-        shelf.close()
+        fp = open(self.filename, 'w')
+        fp.write(json.dumps(self.courses))
+        fp.close()
