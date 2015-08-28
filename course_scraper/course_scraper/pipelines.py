@@ -1,12 +1,15 @@
 import shelve
 
 
+
+
 class CourseScraperPipeline(object):
     def process_item(self, item, spider):
         return item
 
 
 class PicklePipeline(object):
+    shelf_filename = 'courses'
 
     def __init__(self):
         self.courses = {}
@@ -29,7 +32,7 @@ class PicklePipeline(object):
         self.courses[key] = item_dict
 
     def close_spider(self, spider):
-        shelf = shelve.open('courses.db')
+        shelf = shelve.open(shelf_filename)
         for k, v in self.courses.iteritems():
             shelf[k] = v
 
