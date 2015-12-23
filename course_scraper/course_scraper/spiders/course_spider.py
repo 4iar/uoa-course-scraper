@@ -6,7 +6,7 @@ from course_scraper.items import Course
 
 
 class CourseSpider(Spider):
-    name = "course"
+    name = "course_scraper"
     allowed_domains = ["aberdeen.ac.uk", "abdn.ac.uk"]
     start_urls = ["https://www.abdn.ac.uk/registry/courses/undergraduate"]
 
