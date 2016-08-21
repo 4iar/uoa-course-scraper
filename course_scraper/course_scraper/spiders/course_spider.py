@@ -59,7 +59,7 @@ class CourseSpider(Spider):
     def parse_course_timetable(self, response):
         item = response.meta['item']
         item['id'] = int(response.xpath('//script[@type="text/javascript"]').re(r'var +courseId + = +"([0-9]+)";')[0])
-        item['timetable_json_url'] = str.format("https://www.abdn.ac.uk/mist/apps/courseoverlay/timetable/fullTimetableAjax/2015-06-07%2000:00:00/2015-12-07%2000:00:00/{}/0", str(item['id']))
+        item['timetable_json_url'] = str.format("https://www.abdn.ac.uk/mist/apps/courseoverlay/timetable/fullTimetableAjax/2016-09-07%2000:00:00/2017-08-01%2000:00:00/{}/0", str(item['id']))
 
         return [Request(item['timetable_json_url'], callback=self.parse_timetable_json, meta={'item': item})]
 
