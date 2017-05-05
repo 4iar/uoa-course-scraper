@@ -40,6 +40,16 @@ class JSONPipeline(object):
         self.courses[course] = item_extracted
 
     def close_spider(self, spider):
+        """
+        Dump the results to a json file
+
+        Note:
+            There are only ~1200 courses which takes up minimal ram so in this case it is faster to store the data
+            in memory and write once at the end (rather than appending a new row for each item).
+
+            If there were far more courses it would be more efficient to write on each item rather than
+            storing in memory.
+        """
         fp = open(self.filename, 'w')
         fp.write(json.dumps(self.courses))
         fp.close()

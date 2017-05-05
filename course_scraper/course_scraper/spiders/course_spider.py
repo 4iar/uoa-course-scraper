@@ -8,6 +8,10 @@ from course_scraper.items import Course
 class CourseSpider(Spider):
     """
     Extracts undergraduate courses at UoA, providing metadata (e.g. credits, term, descriptions) and timetable data
+
+        +-------------+     +---------+     +--------------+     +-----------+
+        |  categories +---> | courses +---> | timetable id +---> | timetable |
+        +-------------+     +---------+     +--------------+     +-----------+
     """
     name = "course_scraper"
     allowed_domains = ["aberdeen.ac.uk", "abdn.ac.uk"]
@@ -63,22 +67,26 @@ class CourseSpider(Spider):
         item['credits'] = float(response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[2]/text()').
                                 extract()[0].split()[0])
 
-        h = response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[1]/text()').extract()[0]
-        if 'first' in h.lower():
+        # Courses are in the first or second half of the semester. Identify which half a course is in and represent it
+        # as an int for easier processing
+        half_text = response.xpath('//*[@id="overview"]/div[2]/div[2]/div/table/tbody/tr[2]/td[1]/text()').extract()[0]
+        if 'first' in half_text.lower():
             item['half'] = 1
         else:
             item['half'] = 2
 
-        courses = {  # template form data
-                     'course-1': item['code'],
-                     'course-2': '',
-                     'course-3': '',
-                     'course-4': '',
-                     'course-5': '',
-                     'course-6': '',
-                     'course-7': '',
-                     'course-8': '',
-                     'submit': 'submit'}
+        # Construct the form data needed to request the timetable id
+        courses = {
+            'course-1': item['code'],
+            'course-2': '',
+            'course-3': '',
+            'course-4': '',
+            'course-5': '',
+            'course-6': '',
+            'course-7': '',
+            'course-8': '',
+            'submit': 'submit'
+        }
 
         url = 'https://www.abdn.ac.uk/mist/apps/courseoverlay/timetable/overlays/'
         return [FormRequest(url, formdata=courses, callback=self.parse_timetable_id, meta={'item': item})]
