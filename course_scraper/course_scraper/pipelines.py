@@ -32,7 +32,7 @@ class JSONPipeline(object):
         # -> Extract only the lecture events (LEC) since these are most relevant for clash checking.
         try:
             item_extracted['timetable_json_lectures_only'] = [l for l in item['timetable_json']['events']
-                                                         if l['typeShort'] == 'LEC']
+                                                              if l['typeShort'] == 'LEC']
         except (KeyError, ValueError):
             # Some courses have no timetable (e.g. distance learning courses), so handle these appropriately
             item_extracted['timetable_json_lectures_only'] = None
