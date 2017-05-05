@@ -12,7 +12,7 @@
 BOT_NAME = 'course_scraper'
 
 SPIDER_MODULES = ['course_scraper.spiders']
-ITEM_PIPELINES = ['course_scraper.pipelines.JSONPipeline']
+ITEM_PIPELINES = {'course_scraper.pipelines.JSONPipeline': 1}
 NEWSPIDER_MODULE = 'course_scraper.spiders'
 
 
