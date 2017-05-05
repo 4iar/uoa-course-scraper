@@ -8,7 +8,7 @@ class JSONPipeline(object):
         self.filename = 'courses.json'
 
     def process_item(self, item, spider):
-        key = item['code'].encode('ascii')
+        key = item['code']
         item_dict = {  # iter through item.keys instead of doing this manually
             'study_type': item['study_type'],
             'category': item['category'],
