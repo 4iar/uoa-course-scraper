@@ -8,28 +8,36 @@ class JSONPipeline(object):
         self.filename = 'courses.json'
 
     def process_item(self, item, spider):
-        key = item['code']
-        item_dict = {  # iter through item.keys instead of doing this manually
-            'study_type': item['study_type'],
-            'category': item['category'],
-            'course_url': item['course_url'],
-            'level': item['level'],
-            'half': item['half'],
-            'credits': item['credits'],
-            'code': item['code'],
-            'id': item['id'],
-            'title': item['title'],
-            'timetable_json_url': item['timetable_json_url'],
-            'timetable_json': item['timetable_json'],
-        }
+        course = item['code']
 
+        keys = [
+            'study_type',
+            'category',
+            'course_url',
+            'level',
+            'half',
+            'credits',
+            'code',
+            'id',
+            'title',
+            'timetable_json_url',
+            'timetable_json'
+        ]
+
+        item_extracted = {}
+        for k in keys:
+            item_extracted[k] = item[k]
+
+        # There are multiple types of events such as labs (LAB), seminars (SEM), etc.
+        # -> Extract only the lecture events (LEC) since these are most relevant for clash checking.
         try:
-            item_dict['timetable_json_lectures_only'] = [l for l in item['timetable_json']['events']
+            item_extracted['timetable_json_lectures_only'] = [l for l in item['timetable_json']['events']
                                                          if l['typeShort'] == 'LEC']
-        except (KeyError, ValueError):  # handles courses with no timetable (e.g. distance learning)
-            item_dict['timetable_json_lectures_only'] = None
+        except (KeyError, ValueError):
+            # Some courses have no timetable (e.g. distance learning courses), so handle these appropriately
+            item_extracted['timetable_json_lectures_only'] = None
 
-        self.courses[key] = item_dict
+        self.courses[course] = item_extracted
 
     def close_spider(self, spider):
         fp = open(self.filename, 'w')
