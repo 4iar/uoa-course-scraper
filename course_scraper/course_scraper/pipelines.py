@@ -1,11 +1,6 @@
 import json
 
 
-class CourseScraperPipeline(object):
-    def process_item(self, item, spider):
-        return item
-
-
 class JSONPipeline(object):
 
     def __init__(self):
