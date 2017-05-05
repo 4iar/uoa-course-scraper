@@ -10,6 +10,10 @@ class CourseSpider(Spider):
     allowed_domains = ["aberdeen.ac.uk", "abdn.ac.uk"]
     start_urls = ["https://www.abdn.ac.uk/registry/courses/undergraduate"]
 
+    def __init__(self, year=2017):
+        super(CourseSpider, self).__init__()
+        self.year = int(year)
+
     def parse(self, response):
         category_urls = Selector(response).xpath('//html/body/div[5]/div[*]/div[*]/div/div[2]/div[2]/a/@href').extract()
 
@@ -59,7 +63,7 @@ class CourseSpider(Spider):
     def parse_course_timetable(self, response):
         item = response.meta['item']
         item['id'] = int(response.xpath('//script[@type="text/javascript"]').re(r'var +courseId + = +"([0-9]+)";')[0])
-        item['timetable_json_url'] = str.format("https://www.abdn.ac.uk/mist/apps/courseoverlay/timetable/fullTimetableAjax/2015-06-07%2000:00:00/2015-12-07%2000:00:00/{}/0", str(item['id']))
+        item['timetable_json_url'] = str.format("https://www.abdn.ac.uk/mist/apps/courseoverlay/timetable/fullTimetableAjax/{}-09-07%2000:00:00/{}-12-07%2000:00:00/{}/0", self.year - 1, self.year, str(item['id']))
 
         return [Request(item['timetable_json_url'], callback=self.parse_timetable_json, meta={'item': item})]
 
