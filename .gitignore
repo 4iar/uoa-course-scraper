@@ -1,5 +1,9 @@
 # Created by https://www.gitignore.io/api/python,linux,windows,vim,emacs,pycharm,virtualenv,osx
 
+### Output files ###
+*.json
+
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
